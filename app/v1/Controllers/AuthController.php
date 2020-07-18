@@ -40,6 +40,12 @@ class AuthController extends BaseController
     {
         $input = $request->getParsedBody();
 
+        if ($input == null) {
+            return $response->withJson(
+                array('success' => false, 'message' => ENDPOINT_PARAM_COUNT_ERROR),
+                404);
+        }
+
         $requiredData = $this->verifyRequiredParameters(['user_email', 'user_password'], $input);
         if ($requiredData['success'] == false) {
             return $response->withJson($requiredData, 404);
@@ -94,6 +100,12 @@ class AuthController extends BaseController
     public function refreshToken(Request $request, Response $response, array $args): Response
     {
         $input = $request->getParsedBody();
+
+        if ($input == null) {
+            return $response->withJson(
+                array('success' => false, 'message' => ENDPOINT_PARAM_COUNT_ERROR),
+                404);
+        }
 
         $requiredData = $this->verifyRequiredParameters(['refresh_token'], $input);
         if ($requiredData['success'] == false) {

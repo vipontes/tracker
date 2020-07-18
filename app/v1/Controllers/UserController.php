@@ -20,7 +20,7 @@ class UserController extends BaseController
 
     public function getUser(Request $request, Response $response, array $args): Response
     {
-        $userId = $request->getAttribute('userId');
+        $userId = $request->getAttribute('user_id');
 
         $dataAccessObject = new UserDAO();
         $user = $dataAccessObject->getUser($userId);
@@ -42,6 +42,12 @@ class UserController extends BaseController
     public function postUser(Request $request, Response $response, array $args): Response
     {
         $input = $request->getParsedBody();
+
+        if ($input == null) {
+            return $response->withJson(
+                array('success' => false, 'message' => ENDPOINT_PARAM_COUNT_ERROR),
+                404);
+        }
 
         $requiredData = $this->verifyRequiredParameters(['user_name', 'user_email', 'user_password'], $input);
         if ($requiredData['success'] == false) {
@@ -82,6 +88,12 @@ class UserController extends BaseController
     public function putUser(Request $request, Response $response, array $args): Response
     {
         $input = $request->getParsedBody();
+
+        if ($input == null) {
+            return $response->withJson(
+                array('success' => false, 'message' => ENDPOINT_PARAM_COUNT_ERROR),
+                404);
+        }
 
         $requiredData = $this->verifyRequiredParameters(['user_id'], $input);
         if ($requiredData['success'] == false) {
@@ -151,6 +163,12 @@ class UserController extends BaseController
     {
         $input = $request->getParsedBody();
 
+        if ($input == null) {
+            return $response->withJson(
+                array('success' => false, 'message' => ENDPOINT_PARAM_COUNT_ERROR),
+                404);
+        }
+
         $requiredData = $this->verifyRequiredParameters(['user_id', 'user_password', 'user_new_password'], $input);
         if ($requiredData['success'] == false) {
             return $response->withJson($requiredData, 404);
@@ -212,6 +230,12 @@ class UserController extends BaseController
     public function forgotPassword(Request $request, Response $response, array $args): Response
     {
         $input = $request->getParsedBody();
+
+        if ($input == null) {
+            return $response->withJson(
+                array('success' => false, 'message' => ENDPOINT_PARAM_COUNT_ERROR),
+                404);
+        }
 
         $requiredData = $this->verifyRequiredParameters(['user_email'], $input);
         if ($requiredData['success'] == false) {

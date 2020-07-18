@@ -8,6 +8,7 @@ use App\v1\DAO\UserDAO;
 use Firebase\JWT\JWT;
 use \App\v1\Controllers\AuthController;
 use \App\v1\Controllers\UserController;
+use \App\v1\Controllers\UserRouteController;
 use \Psr\Http\Message\ResponseInterface as Response;
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Tuupola\Middleware\JwtAuthentication;
@@ -95,12 +96,20 @@ class App
             $app->post('/user', UserController::class . ':postUser');
 
             $app->group('', function () use ($app) {
-                // Usuários
+                // Users
                 $app->get('/users', UserController::class . ':getUsers');
-                $app->get('/user/{userId}', UserController::class . ':getUser');
+                $app->get('/user/{user_id}', UserController::class . ':getUser');
                 $app->put('/user', UserController::class . ':putUser');
                 $app->put('/user/change-password', UserController::class . ':changePassword');
-                $app->delete('/user/{userId}', UserController::class . ':deleteUser');
+                $app->delete('/user/{user_id}', UserController::class . ':deleteUser');
+
+                // Routes
+                $app->get('/routes/{user_id}', UserRouteController::class . ':getRoutesByUser');
+                $app->get('/route/{user_route_id}', UserRouteController::class . ':getRoute');
+                $app->post('/route', UserRouteController::class . ':postUserRoute');
+                $app->put('/route/end', UserRouteController::class . ':putUserRouteEndTime');
+                $app->delete('/route/{user_route_id}', UserRouteController::class . ':deleteUserRoute');
+
             })->add(new JwtAuthMiddleware())->add(jwtAuth());
         });
 

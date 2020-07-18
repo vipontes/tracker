@@ -6,6 +6,8 @@ define('LOGIN_INACTIVE', 'You are blocked. Contact the system administrator.');
 
 define('USER_PASSWORD_CHANGED', 'Password successfuly changed!');
 define('USER_NOT_FOUND', 'User not found');
+define('ROUTE_NOT_FOUND', 'Route not found');
+define('ROUTE_UPDATED', 'Route has been updated');
 
 define('ENDPOINT_PARAM_COUNT_ERROR', 'Invalid parameter count.');
 

@@ -124,7 +124,7 @@ class UserDAO extends Connection
     /**
      *
      */
-    public function getUsers(): array
+    public function getUsers(): ?array
     {
         $sql = "SELECT
             user_id,
