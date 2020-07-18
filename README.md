@@ -1,18 +1,28 @@
 # tracker-api
 
-## Unit Test
+This is a PHP REST API using JWT authentication.
+
+The purpose of this API is to provide data to Tracker app, located at [Not Initialized yet](https://github.com/vipontes).
+
+This is the database schema used by this API:
+
+![](database-schema.png)
+
+## Tips and Tricks
+
+### Unit Test
 
 ```
 ./vendor/bin/phpunit ./tests/UserTest.php
 ```
 
-## Create a local server on PHP
+### Create a local server on PHP
 
 ```
 php -S 127.0.0.1:8080 -t public
 ```
 
-## autoload update command. Run it anytime you change _composer.json_
+### Autoload update command. Run it anytime you change _composer.json_
 
 ```
 composer dump-autoload
