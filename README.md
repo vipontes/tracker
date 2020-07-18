@@ -2,7 +2,7 @@
 
 This is a PHP REST API using JWT authentication.
 
-The purpose of this API is to provide data to Tracker app, located at [Not Initialized yet](https://github.com/vipontes).
+The purpose of this API is to provide data to Tracker app, located at [TrackerApp](https://github.com/vipontes/tracker-app).
 
 This is the database schema used by this API:
 
