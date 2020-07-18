@@ -9,6 +9,7 @@ use Firebase\JWT\JWT;
 use \App\v1\Controllers\AuthController;
 use \App\v1\Controllers\UserController;
 use \App\v1\Controllers\UserRouteController;
+use \App\v1\Controllers\UserRoutePathController;
 use \Psr\Http\Message\ResponseInterface as Response;
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Tuupola\Middleware\JwtAuthentication;
@@ -110,6 +111,9 @@ class App
                 $app->put('/route/end', UserRouteController::class . ':putUserRouteEndTime');
                 $app->delete('/route/{user_route_id}', UserRouteController::class . ':deleteUserRoute');
 
+                // RoutePath
+                $app->get('/routepaths/{user_route_id}', UserRoutePathController::class . ':getPathByRoute');
+                $app->post('/routepath', UserRoutePathController::class . ':postUserRoutePath');
             })->add(new JwtAuthMiddleware())->add(jwtAuth());
         });
 
