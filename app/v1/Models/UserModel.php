@@ -13,6 +13,7 @@ final class UserModel implements JsonSerializable
     private $userActive = 0;
     private $userAvatar = '';
     private $userCreatedAt = '';
+    private $user_weight = 0;
     private $token = '';
     private $refreshToken = '';
 
@@ -26,6 +27,7 @@ final class UserModel implements JsonSerializable
             'userActive' => $this->userActive,
             'userAvatar' => $this->userAvatar,
             'userCreatedAt' => $this->userCreatedAt,
+            'user_weight' => $this->user_weight,
             'token' => $this->token,
             'refreshToken' => $this->refreshToken,
         ];
@@ -207,6 +209,26 @@ final class UserModel implements JsonSerializable
     public function setRefreshToken($refreshToken)
     {
         $this->refreshToken = $refreshToken;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of weight
+     */
+    public function getUserWeight()
+    {
+        return $this->user_weight;
+    }
+
+    /**
+     * Set the value of weight
+     *
+     * @return  self
+     */
+    public function setUserWeight($user_weight)
+    {
+        $this->user_weight = $user_weight;
 
         return $this;
     }

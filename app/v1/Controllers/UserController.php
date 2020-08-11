@@ -114,6 +114,7 @@ class UserController extends BaseController
         $inputData->setUserEmail($input['user_email']);
         $inputData->setUserPassword($input['user_password']);
         $inputData->setUserActive($input['user_active']);
+        $inputData->setUserWeight($input['user_weight']);
 
         $dataAccessObject = new UserDAO();
         $update = $dataAccessObject->putUser($inputData);
@@ -209,6 +210,7 @@ class UserController extends BaseController
         $inputData->setUserEmail(null);
         $inputData->setUserSenha($newPassHash);
         $inputData->setUserActive(null);
+        $inputData->setUserWeight(null);
 
         if ($dataAccessObject->putUser($inputData)) {
             $status = 200;
@@ -271,6 +273,7 @@ class UserController extends BaseController
         $inputData->setUserEmail(null);
         $inputData->setUserPassword($passHash);
         $inputData->setUserActive(null);
+        $inputData->setUserWeight(null);
 
         if ($dataAccessObject->putUser($inputData)) {
             $status = 200;

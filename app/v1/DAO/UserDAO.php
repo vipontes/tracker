@@ -93,6 +93,7 @@ class UserDAO extends Connection
             user_active,
             user_avatar,
             user_created_at,
+            user_weight,
             token,
             refresh_token
             FROM user
@@ -112,6 +113,7 @@ class UserDAO extends Connection
                 ->setUserActive($data['user_active'])
                 ->setUserCreatedAt($data['user_created_at'])
                 ->setUserAvatar($data['user_avatar'])
+                ->setUserWeight($data['user_weight'])
                 ->setToken($data['token'])
                 ->setRefreshToken($data['refresh_token']);
 
@@ -134,6 +136,7 @@ class UserDAO extends Connection
             user_active,
             user_avatar,
             user_created_at,
+            user_weight,
             token,
             refresh_token
             FROM user
@@ -154,6 +157,7 @@ class UserDAO extends Connection
                 ->setUserPassword($item['user_password'])
                 ->setUserActive($item['user_active'])
                 ->setUserCreatedAt($item['user_created_at'])
+                ->setUserWeight($item['user_weight'])
                 ->setUserAvatar($item['user_avatar'])
                 ->setToken($item['token'])
                 ->setRefreshToken($item['refresh_token']);
@@ -177,6 +181,7 @@ class UserDAO extends Connection
             user_active,
             user_avatar,
             user_created_at,
+            user_weight,
             token,
             refresh_token
             FROM user
@@ -195,6 +200,7 @@ class UserDAO extends Connection
                 ->setUserPassword($data['user_password'])
                 ->setUserActive($data['user_active'])
                 ->setUserCreatedAt($data['user_created_at'])
+                ->setUserWeight($data['user_weight'])
                 ->setUserAvatar($data['user_avatar'])
                 ->setToken($data['token'])
                 ->setRefreshToken($data['refresh_token']);
@@ -265,6 +271,11 @@ class UserDAO extends Connection
         if ($inputData->getUserActive() != null) {
             array_push($fields, "user_active = :user_active");
             $values[':user_active'] = $inputData->getUserActive();
+        }
+
+        if ($inputData->getUserWeight() != null) {
+            array_push($fields, "user_weight = :user_weight");
+            $values[':user_weight'] = $inputData->getUserWeight();
         }
 
         $values[':user_id'] = $inputData->getUserId();
