@@ -4,6 +4,7 @@ namespace App\v1\Controllers;
 
 use App\v1\DAO\UserRouteDAO;
 use App\v1\Models\UserRouteModel;
+use App\v1\Models\UserRoutePathModel;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -32,7 +33,7 @@ class UserRouteController extends BaseController
         $dataAccessObject = new UserRouteDAO();
         $userRoute = $dataAccessObject->getRoute($userRouteId);
 
-        if ($userRoutes != null) {
+        if ($userRoute != null) {
             $status = 200;
             header('Content-Type: application/json');
             return $response->withJson($userRoute, $status);
@@ -99,22 +100,41 @@ class UserRouteController extends BaseController
                 404);
         }
 
-        $requiredData = $this->verifyRequiredParameters(['user_id', 'user_route_description'], $input);
+        $requiredData = $this->verifyRequiredParameters([
+            'user_id',
+            'user_route_description',
+            'user_route_start_time',
+            'user_route_end_time',
+            'path',
+        ], $input);
         if ($requiredData['success'] == false) {
             return $response->withJson($requiredData, 404);
         }
 
         $user_id = $input['user_id'];
         $user_route_description = $input['user_route_description'];
+        $user_route_start_time = $input['user_route_start_time'];
+        $user_route_end_time = $input['user_route_end_time'];
+        $path = $input['path'];
 
         $userRoute = new UserRouteModel();
         $userRoute->setUserId($user_id)
             ->setUserRouteDescription($user_route_description)
-            ->setUserRouteStartTime(null)
-            ->setUserRouteEndTime(null);
+            ->setUserRouteStartTime($user_route_start_time)
+            ->setUserRouteEndTime($user_route_end_time);
+
+        $data = array();
+        foreach ($path as $item) {
+            $userRoutePath = new UserRoutePathModel();
+            $userRoutePath->setUserRoutePathLat($item['user_route_path_latitude'])
+                ->setUserRoutePathLng($item['user_route_path_longitude'])
+                ->setUserRoutePathDatetime($item['user_route_path_datetime']);
+
+            $data[] = $userRoutePath;
+        }
 
         $dataAccessObject = new UserRouteDAO();
-        $userRouteId = $dataAccessObject->postUserRoute($userRoute);
+        $userRouteId = $dataAccessObject->postUserRoute($userRoute, $data);
 
         if (isset($userRouteId)) {
             $status = 200;

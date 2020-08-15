@@ -10,6 +10,7 @@ final class UserRoutePathModel implements JsonSerializable
     private $userRouteId = 0;
     private $userRoutePathLat = 0;
     private $userRoutePathLng = 0;
+    private $userRoutePathAltitude = 0;
     private $userRoutePathDatetime = '';
 
     public function jsonSerialize()
@@ -17,7 +18,9 @@ final class UserRoutePathModel implements JsonSerializable
         return [
             'userRoutePathId' => $this->userRoutePathId,
             'userRouteId' => $this->userRouteId,
-            'userRoutePathLatlng' => $this->userRoutePathLatlng,
+            'userRoutePathLat' => $this->userRoutePathLat,
+            'userRoutePathLng' => $this->userRoutePathLng,
+            'userRoutePathAltitude' => $this->userRoutePathAltitude,
             'userRoutePathDatetime' => $this->userRoutePathDatetime,
         ];
     }
@@ -118,6 +121,26 @@ final class UserRoutePathModel implements JsonSerializable
     public function setUserRoutePathLng($userRoutePathLng)
     {
         $this->userRoutePathLng = $userRoutePathLng;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of userRoutePathAltitude
+     */
+    public function getUserRoutePathAltitude()
+    {
+        return $this->userRoutePathAltitude;
+    }
+
+    /**
+     * Set the value of userRoutePathAltitude
+     *
+     * @return  self
+     */
+    public function setUserRoutePathAltitude($userRoutePathAltitude)
+    {
+        $this->userRoutePathAltitude = $userRoutePathAltitude;
 
         return $this;
     }

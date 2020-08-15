@@ -31,6 +31,7 @@ class UserRoutePathDAO extends Connection
             user_route_id,
             X(user_route_path_latlng) AS lat,
             Y(user_route_path_latlng) AS lng,
+            user_route_path_altitude,
             user_route_path_datetime
             FROM user_route_path
             WHERE user_route_id = :user_route_id
@@ -49,9 +50,10 @@ class UserRoutePathDAO extends Connection
                 ->setUserRouteId($item['user_route_id'])
                 ->setUserRoutePathLat($item['lat'])
                 ->setUserRoutePathLng($item['lng'])
+                ->setUserRoutePathAltitude($item['user_route_path_altitude'])
                 ->setUserRoutePathDatetime($item['user_route_path_datetime']);
 
-            $res[] = $userRoute;
+            $res[] = $userRoutePath;
         }
 
         return $res;
@@ -62,8 +64,8 @@ class UserRoutePathDAO extends Connection
      */
     public function postUserRoutePath(UserRoutePathModel $userRoutePath): ?int
     {
-        $query = "INSERT INTO user_route_path (user_route_id, user_route_path_latlng)
-        VALUES (:user_route_id, POINT(:user_route_path_lat, :user_route_path_lng)";
+        $query = "INSERT INTO user_route_path (user_route_id, user_route_path_latlng, user_route_path_altitude, user_route_path_datetime)
+        VALUES (:user_route_id, POINT(:user_route_path_lat, :user_route_path_lng), user_route_path_altitude, user_route_path_datetime)";
 
         try {
             $sth = $this->pdo->prepare($query);
@@ -71,6 +73,8 @@ class UserRoutePathDAO extends Connection
                 ':user_route_id' => $userRoutePath->getUserRouteId(),
                 ':user_route_path_lat' => $userRoutePath->getUserRoutePathLat(),
                 ':user_route_path_lng' => $userRoutePath->getUserRoutePathLng(),
+                ':user_route_path_altitude' => $userRoutePath->getUserRoutePathAltitude(),
+                ':user_route_path_datetime' => $userRoutePath->getUserRoutePathDatetime(),
             ]);
 
             $result = $sth->rowCount();

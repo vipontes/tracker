@@ -48,7 +48,7 @@ class UserRouteDAO extends Connection
 
             $userRoute->setUserId($item['user_id'])
                 ->setUserRouteId($item['user_route_id'])
-                ->getUserRouteDescription($item['user_route_description'])
+                ->setUserRouteDescription($item['user_route_description'])
                 ->setUserRouteStartTime($item['user_route_start_time'])
                 ->setUserRouteEndTime($item['user_route_end_time']);
 
@@ -61,7 +61,7 @@ class UserRouteDAO extends Connection
     /**
      *
      */
-    public function getRoute(string $userRouteId): ?array
+    public function getRoute(string $userRouteId): ?UserRouteModel
     {
         $sql = "SELECT
             user_route_id,
@@ -70,8 +70,7 @@ class UserRouteDAO extends Connection
             user_route_start_time,
             user_route_end_time
             FROM user_route
-            WHERE user_route_id = :user_route_id
-            ORDER BY user_route_id DESC";
+            WHERE user_route_id = :user_route_id";
 
         $sth = $this->pdo->prepare($sql);
         $sth->execute(array(':user_route_id' => $userRouteId));
@@ -82,7 +81,7 @@ class UserRouteDAO extends Connection
 
             $userRoute->setUserId($data['user_id'])
                 ->setUserRouteId($data['user_route_id'])
-                ->getUserRouteDescription($data['user_route_description'])
+                ->setUserRouteDescription($data['user_route_description'])
                 ->setUserRouteStartTime($data['user_route_start_time'])
                 ->setUserRouteEndTime($data['user_route_end_time']);
 
@@ -95,22 +94,56 @@ class UserRouteDAO extends Connection
     /**
      *
      */
-    public function postUserRoute(UserRouteModel $userRoute): ?int
+    public function postUserRoute(UserRouteModel $userRoute, $userRoutePath): ?int
     {
-        $query = "INSERT INTO user_route (user_id, user_route_description) VALUES (:user_id, :user_route_description)";
+        $query = "INSERT INTO user_route (user_id, user_route_description, user_route_start_time, user_route_end_time) VALUES (:user_id, :user_route_description, :user_route_start_time, :user_route_end_time)";
 
         try {
+            $this->pdo->beginTransaction();
+
             $sth = $this->pdo->prepare($query);
             $sth->execute([
                 ':user_id' => $userRoute->getUserId(),
                 ':user_route_description' => $userRoute->getUserRouteDescription(),
+                ':user_route_start_time' => $userRoute->getUserRouteStartTime(),
+                ':user_route_end_time' => $userRoute->getUserRouteEndTime(),
             ]);
 
             $result = $sth->rowCount();
 
             if ($result > 0) {
-                return $this->pdo->lastInsertId();
+                $userRouteId = $this->pdo->lastInsertId();
+
+                $error = false;
+                foreach ($userRoutePath as $item) {
+                    $query = "INSERT INTO user_route_path (user_route_id, user_route_path_latlng, user_route_path_altitude, user_route_path_datetime)
+                    VALUES (:user_route_id, POINT(:user_route_path_lat, :user_route_path_lng), :user_route_path_altitude, :user_route_path_datetime)";
+
+                    $sth = $this->pdo->prepare($query);
+                    $sth->execute([
+                        ':user_route_id' => $userRouteId,
+                        ':user_route_path_lat' => $item->getUserRoutePathLat(),
+                        ':user_route_path_lng' => $item->getUserRoutePathLng(),
+                        ':user_route_path_altitude' => 0,
+                        ':user_route_path_datetime' => $item->getUserRoutePathDatetime(),
+                    ]);
+
+                    $result = $sth->rowCount();
+                    if ($result == 0) {
+                        $error = true;
+                        break;
+                    }
+                }
+
+                if (!$error) {
+                    $this->pdo->commit();
+                    return $userRouteId;
+                } else {
+                    $this->pdo->rollBack();
+                    $this->lastError = PDO_INSERT_ERROR;
+                }
             } else {
+                $this->pdo->rollBack();
                 $this->lastError = PDO_INSERT_ERROR;
             }
         } catch (PDOException $e) {

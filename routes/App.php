@@ -112,7 +112,7 @@ class App
                 $app->delete('/route/{user_route_id}', UserRouteController::class . ':deleteUserRoute');
 
                 // RoutePath
-                $app->get('/routepaths/{user_route_id}', UserRoutePathController::class . ':getPathByRoute');
+                $app->get('/routepath/{user_route_id}', UserRoutePathController::class . ':getPathByRoute');
                 $app->post('/routepath', UserRoutePathController::class . ':postUserRoutePath');
             })->add(new JwtAuthMiddleware())->add(jwtAuth());
         });
