@@ -124,7 +124,7 @@ class UserRouteDAO extends Connection
                         ':user_route_id' => $userRouteId,
                         ':user_route_path_lat' => $item->getUserRoutePathLat(),
                         ':user_route_path_lng' => $item->getUserRoutePathLng(),
-                        ':user_route_path_altitude' => 0,
+                        ':user_route_path_altitude' => $item->getUserRoutePathAltitude(),
                         ':user_route_path_datetime' => $item->getUserRoutePathDatetime(),
                     ]);
 

@@ -128,6 +128,7 @@ class UserRouteController extends BaseController
             $userRoutePath = new UserRoutePathModel();
             $userRoutePath->setUserRoutePathLat($item['user_route_path_latitude'])
                 ->setUserRoutePathLng($item['user_route_path_longitude'])
+                ->setUserRoutePathAltitude($item['user_route_path_altitude'])
                 ->setUserRoutePathDatetime($item['user_route_path_datetime']);
 
             $data[] = $userRoutePath;
@@ -138,10 +139,16 @@ class UserRouteController extends BaseController
 
         if (isset($userRouteId)) {
             $status = 200;
-            $result = array();
-            $result['user_route_id'] = $userRouteId;
+
+            $userRoute = new UserRouteModel();
+            $userRoute->setUserRouteId($userRouteId)
+                ->setUserId($user_id)
+                ->setUserRouteDescription($user_route_description)
+                ->setUserRouteStartTime($user_route_start_time)
+                ->setUserRouteEndTime($user_route_end_time);
+
             header('Content-Type: application/json');
-            return $response->withJson($result, $status);
+            return $response->withJson($userRoute, $status);
         } else {
             $status = 401;
             $result = array();
