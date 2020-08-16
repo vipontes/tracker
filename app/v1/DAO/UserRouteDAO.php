@@ -30,6 +30,11 @@ class UserRouteDAO extends Connection
         $sql = "SELECT
             user_route_id,
             user_id,
+            user_route_duration,
+            user_route_distance,
+            user_route_calories,
+            user_route_rhythm,
+            user_route_speed,
             user_route_description,
             user_route_start_time,
             user_route_end_time
@@ -48,6 +53,11 @@ class UserRouteDAO extends Connection
 
             $userRoute->setUserId($item['user_id'])
                 ->setUserRouteId($item['user_route_id'])
+                ->setUserRouteDuration($item['user_route_duration'])
+                ->setUserRouteDistance($item['user_route_distance'])
+                ->setUserRouteCalories($item['user_route_calories'])
+                ->setUserRouteRhythm($item['user_route_rhythm'])
+                ->setUserRouteSpeed($item['user_route_speed'])
                 ->setUserRouteDescription($item['user_route_description'])
                 ->setUserRouteStartTime($item['user_route_start_time'])
                 ->setUserRouteEndTime($item['user_route_end_time']);
@@ -66,6 +76,11 @@ class UserRouteDAO extends Connection
         $sql = "SELECT
             user_route_id,
             user_id,
+            user_route_duration,
+            user_route_distance,
+            user_route_calories,
+            user_route_rhythm,
+            user_route_speed,
             user_route_description,
             user_route_start_time,
             user_route_end_time
@@ -81,6 +96,11 @@ class UserRouteDAO extends Connection
 
             $userRoute->setUserId($data['user_id'])
                 ->setUserRouteId($data['user_route_id'])
+                ->setUserRouteDuration($data['user_route_duration'])
+                ->setUserRouteDistance($data['user_route_distance'])
+                ->setUserRouteCalories($data['user_route_calories'])
+                ->setUserRouteRhythm($data['user_route_rhythm'])
+                ->setUserRouteSpeed($data['user_route_speed'])
                 ->setUserRouteDescription($data['user_route_description'])
                 ->setUserRouteStartTime($data['user_route_start_time'])
                 ->setUserRouteEndTime($data['user_route_end_time']);
@@ -96,7 +116,27 @@ class UserRouteDAO extends Connection
      */
     public function postUserRoute(UserRouteModel $userRoute, $userRoutePath): ?int
     {
-        $query = "INSERT INTO user_route (user_id, user_route_description, user_route_start_time, user_route_end_time) VALUES (:user_id, :user_route_description, :user_route_start_time, :user_route_end_time)";
+        $query = "INSERT INTO user_route (
+                user_id,
+                user_route_duration,
+                user_route_distance,
+                user_route_calories,
+                user_route_rhythm,
+                user_route_speed,
+                user_route_description,
+                user_route_start_time,
+                user_route_end_time
+            ) VALUES (
+                :user_id,
+                :user_route_duration,
+                :user_route_distance,
+                :user_route_calories,
+                :user_route_rhythm,
+                :user_route_speed,
+                :user_route_description,
+                :user_route_start_time,
+                :user_route_end_time
+            )";
 
         try {
             $this->pdo->beginTransaction();
@@ -104,6 +144,11 @@ class UserRouteDAO extends Connection
             $sth = $this->pdo->prepare($query);
             $sth->execute([
                 ':user_id' => $userRoute->getUserId(),
+                ':user_route_duration' => $userRoute->getUserRouteDuration(),
+                ':user_route_distance' => $userRoute->getUserRouteDistance(),
+                ':user_route_calories' => $userRoute->getUserRouteCalories(),
+                ':user_route_rhythm' => $userRoute->getUserRouteRhythm(),
+                ':user_route_speed' => $userRoute->getUserRouteSpeed(),
                 ':user_route_description' => $userRoute->getUserRouteDescription(),
                 ':user_route_start_time' => $userRoute->getUserRouteStartTime(),
                 ':user_route_end_time' => $userRoute->getUserRouteEndTime(),

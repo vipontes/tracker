@@ -102,6 +102,11 @@ class UserRouteController extends BaseController
 
         $requiredData = $this->verifyRequiredParameters([
             'user_id',
+            'user_route_duration',
+            'user_route_distance',
+            'user_route_calories',
+            'user_route_rhythm',
+            'user_route_speed',
             'user_route_description',
             'user_route_start_time',
             'user_route_end_time',
@@ -112,6 +117,11 @@ class UserRouteController extends BaseController
         }
 
         $user_id = $input['user_id'];
+        $user_route_duration = $input['user_route_duration'];
+        $user_route_distance = $input['user_route_distance'];
+        $user_route_calories = $input['user_route_calories'];
+        $user_route_rhythm = $input['user_route_rhythm'];
+        $user_route_speed = $input['user_route_speed'];
         $user_route_description = $input['user_route_description'];
         $user_route_start_time = $input['user_route_start_time'];
         $user_route_end_time = $input['user_route_end_time'];
@@ -119,6 +129,11 @@ class UserRouteController extends BaseController
 
         $userRoute = new UserRouteModel();
         $userRoute->setUserId($user_id)
+            ->setUserRouteDuration($user_route_duration)
+            ->setUserRouteDistance($user_route_distance)
+            ->setUserRouteCalories($user_route_calories)
+            ->setUserRouteRhythm($user_route_rhythm)
+            ->setUserRouteSpeed($user_route_speed)
             ->setUserRouteDescription($user_route_description)
             ->setUserRouteStartTime($user_route_start_time)
             ->setUserRouteEndTime($user_route_end_time);
@@ -139,13 +154,7 @@ class UserRouteController extends BaseController
 
         if (isset($userRouteId)) {
             $status = 200;
-
-            $userRoute = new UserRouteModel();
-            $userRoute->setUserRouteId($userRouteId)
-                ->setUserId($user_id)
-                ->setUserRouteDescription($user_route_description)
-                ->setUserRouteStartTime($user_route_start_time)
-                ->setUserRouteEndTime($user_route_end_time);
+            $userRoute->setUserRouteId($userRouteId);
 
             header('Content-Type: application/json');
             return $response->withJson($userRoute, $status);
